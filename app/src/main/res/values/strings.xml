@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">NetworkingPlayground</string>
+
+    <string name="list_screen_title">ListScreen</string>
+
+    <string name="details_screen_title">Details screen</string>
+
+    <string name="back_button">Back button</string>
+
+</resources>
