@@ -6,11 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import hu.csoniworks.networkingplayground.di.DetailsScreenViewModelFactory
 import hu.csoniworks.networkingplayground.ui.navigation.Screen
 import hu.csoniworks.networkingplayground.ui.screens.details.DetailsScreen
+import hu.csoniworks.networkingplayground.ui.screens.details.DetailsScreenViewModel
 import hu.csoniworks.networkingplayground.ui.screens.list.ListScreen
+import hu.csoniworks.networkingplayground.ui.screens.list.ListScreenViewModel
 import hu.csoniworks.networkingplayground.ui.theme.NetworkingPlaygroundTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,18 +30,25 @@ class MainActivity : ComponentActivity() {
                 NavDisplay(
                     backStack = backStack,
                     onBack = { backStack.removeLastOrNull() },
+                    entryDecorators = listOf(
+                        rememberSaveableStateHolderNavEntryDecorator(),
+                        rememberViewModelStoreNavEntryDecorator()
+                    ),
                     entryProvider = { screenKey ->
                         when (screenKey) {
                             is Screen.ListScreen -> NavEntry(screenKey) {
                                 ListScreen(
+                                    viewModel = viewModel<ListScreenViewModel>(),
                                     onBackClicked = { backStack.removeLastOrNull() },
-                                    onItemClicked = { id -> backStack.add(Screen.DetailsScreen(id) ) }
+                                    onItemClicked = { id -> backStack.add(Screen.DetailsScreen(id)) }
                                 )
                             }
 
                             is Screen.DetailsScreen -> NavEntry(screenKey) {
                                 DetailsScreen(
-                                    id = screenKey.id,
+                                    viewModel = viewModel<DetailsScreenViewModel>(
+                                        factory = DetailsScreenViewModelFactory(screenKey)
+                                    ),
                                     onBackClicked = { backStack.removeLastOrNull() }
                                 )
                             }
