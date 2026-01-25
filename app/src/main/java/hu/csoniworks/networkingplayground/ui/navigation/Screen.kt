@@ -1,12 +1,14 @@
 package hu.csoniworks.networkingplayground.ui.navigation
 
-sealed class Screen {
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
 
-    data object ListScreen : Screen()
-    data class DetailsScreen(val id: String) : Screen() {
-        companion object {
-            const val EXTRAS_ID = "EXTRAS_ID"
-        }
-    }
+sealed interface Screen : NavKey {
+
+    @Serializable
+    data object ListScreen : Screen
+
+    @Serializable
+    data class DetailsScreen(val id: Int) : Screen
 
 }

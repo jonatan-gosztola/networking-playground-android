@@ -7,4 +7,6 @@
 
     <string name="back_button">Back button</string>
 
+    <string name="error">Something went wrong.</string>
+
 </resources>
